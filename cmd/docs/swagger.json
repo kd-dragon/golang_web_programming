@@ -1,0 +1,353 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Membership API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/api/v2/memberships": {
+            "get": {
+                "description": "멤버십 정보 전체 목록 조회합니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Memberships"
+                ],
+                "summary": "멤버십 정보 목록 조회",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/membership.ReadAllResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "멤버십을 수정합니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Memberships"
+                ],
+                "summary": "멤버십 수정",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "ID: 아이디, UserName:사용자의 이름, MembershipType:naver,toss,pacyco 중 하나",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/membership.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/membership.UpdateResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "멤버십을 생성합니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Memberships"
+                ],
+                "summary": "멤버십 생성",
+                "parameters": [
+                    {
+                        "description": "UserName:사용자의 이름, MembershipType:naver,toss,pacyco 중 하나",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/membership.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/membership.CreateResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "멤버십을 삭제합니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Memberships"
+                ],
+                "summary": "멤버십 삭제",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Membership uuid",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/membership.DeleteResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/memberships/{id}": {
+            "get": {
+                "description": "멤버십 정보를 조회합니다. (상세 설명)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Memberships"
+                ],
+                "summary": "멤버십 정보 단건 조회",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Membership uuid",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/membership.GetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/membership.Fail400GetResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "membership.CreateRequest": {
+            "type": "object",
+            "properties": {
+                "membership_type": {
+                    "type": "string",
+                    "example": "toss"
+                },
+                "user_name": {
+                    "type": "string",
+                    "example": "andy"
+                }
+            }
+        },
+        "membership.CreateResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "354660dc-f798-11ec-b939-0242ac120002"
+                },
+                "membership_type": {
+                    "type": "string",
+                    "example": "toss"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Created"
+                }
+            }
+        },
+        "membership.DeleteResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Deleted"
+                }
+            }
+        },
+        "membership.Fail400GetResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "membership.GetResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "354660dc-f798-11ec-b939-0242ac120002"
+                },
+                "membership_type": {
+                    "type": "string",
+                    "example": "toss"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "user_name": {
+                    "type": "string",
+                    "example": "andy"
+                }
+            }
+        },
+        "membership.Membership": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "membership_type": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "membership.ReadAllResponse": {
+            "type": "object",
+            "properties": {
+                "memberships": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/membership.Membership"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "ReadAll"
+                }
+            }
+        },
+        "membership.ReadResponse": {
+            "type": "object",
+            "properties": {
+                "membership": {
+                    "$ref": "#/definitions/membership.Membership"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Read"
+                }
+            }
+        },
+        "membership.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "354660dc-f798-11ec-b939-0242ac120002"
+                },
+                "membership_type": {
+                    "type": "string",
+                    "example": "toss"
+                },
+                "user_name": {
+                    "type": "string",
+                    "example": "andy"
+                }
+            }
+        },
+        "membership.UpdateResponse": {
+            "type": "object",
+            "properties": {
+                "membership": {
+                    "$ref": "#/definitions/membership.Membership"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Updated"
+                }
+            }
+        }
+    }
+}

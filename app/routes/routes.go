@@ -4,10 +4,13 @@ import (
 	"GolangLivePT01/golang_web_programming/app/logo"
 	membership "GolangLivePT01/golang_web_programming/app/membership"
 	user "GolangLivePT01/golang_web_programming/app/user"
+	docs "GolangLivePT01/golang_web_programming/cmd/docs"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -25,6 +28,11 @@ func InitializeRoutes(e *echo.Group) {
 
 	c := initController()
 	userMiddleware := initUserMiddleware().Middleware
+
+	// Host 정보 동적으로 수정
+	if os.Getenv("PHASE") == "prod" {
+		docs.SwaggerInfo.Host = "petstore.swagger.io"
+	}
 
 	memberships := e.Group("/memberships")
 	logo := e.Group("/logo")
@@ -48,6 +56,8 @@ func InitializeRoutes(e *echo.Group) {
 	logoCtl := c.LogoController
 	userCtl := c.UserController
 
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	e.Static("/", "assets")
 	memberships.POST("", membershipCtl.Create)
 	memberships.GET("", membershipCtl.ReadAll, jwtMiddleware, userMiddleware.ValidateAdmin)
 	memberships.GET("/:id", membershipCtl.Read, jwtMiddleware, userMiddleware.ValidateMemberOrAdmin)

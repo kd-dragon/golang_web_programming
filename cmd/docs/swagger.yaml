@@ -1,0 +1,239 @@
+definitions:
+  membership.CreateRequest:
+    properties:
+      membership_type:
+        example: toss
+        type: string
+      user_name:
+        example: andy
+        type: string
+    type: object
+  membership.CreateResponse:
+    properties:
+      id:
+        example: 354660dc-f798-11ec-b939-0242ac120002
+        type: string
+      membership_type:
+        example: toss
+        type: string
+      message:
+        example: Created
+        type: string
+    type: object
+  membership.DeleteResponse:
+    properties:
+      message:
+        example: Deleted
+        type: string
+    type: object
+  membership.Fail400GetResponse:
+    properties:
+      message:
+        example: Bad Request
+        type: string
+    type: object
+  membership.GetResponse:
+    properties:
+      id:
+        example: 354660dc-f798-11ec-b939-0242ac120002
+        type: string
+      membership_type:
+        example: toss
+        type: string
+      message:
+        example: OK
+        type: string
+      user_name:
+        example: andy
+        type: string
+    type: object
+  membership.Membership:
+    properties:
+      id:
+        type: string
+      membership_type:
+        type: string
+      user_name:
+        type: string
+    type: object
+  membership.ReadAllResponse:
+    properties:
+      memberships:
+        items:
+          $ref: '#/definitions/membership.Membership'
+        type: array
+      message:
+        example: ReadAll
+        type: string
+    type: object
+  membership.ReadResponse:
+    properties:
+      membership:
+        $ref: '#/definitions/membership.Membership'
+      message:
+        example: Read
+        type: string
+    type: object
+  membership.UpdateRequest:
+    properties:
+      id:
+        example: 354660dc-f798-11ec-b939-0242ac120002
+        type: string
+      membership_type:
+        example: toss
+        type: string
+      user_name:
+        example: andy
+        type: string
+    type: object
+  membership.UpdateResponse:
+    properties:
+      membership:
+        $ref: '#/definitions/membership.Membership'
+      message:
+        example: Updated
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Membership API
+  version: "1.0"
+paths:
+  /api/v2/memberships:
+    delete:
+      consumes:
+      - application/json
+      description: 멤버십을 삭제합니다.
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Membership uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/membership.DeleteResponse'
+      summary: 멤버십 삭제
+      tags:
+      - Memberships
+    get:
+      consumes:
+      - application/json
+      description: 멤버십 정보 전체 목록 조회합니다.
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: offset
+        in: query
+        name: id
+        type: string
+      - description: limit
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/membership.ReadAllResponse'
+      summary: 멤버십 정보 목록 조회
+      tags:
+      - Memberships
+    post:
+      consumes:
+      - application/json
+      description: 멤버십을 생성합니다.
+      parameters:
+      - description: UserName:사용자의 이름, MembershipType:naver,toss,pacyco 중 하나
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/membership.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/membership.CreateResponse'
+      summary: 멤버십 생성
+      tags:
+      - Memberships
+    put:
+      consumes:
+      - application/json
+      description: 멤버십을 수정합니다.
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 'ID: 아이디, UserName:사용자의 이름, MembershipType:naver,toss,pacyco
+          중 하나'
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/membership.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/membership.UpdateResponse'
+      summary: 멤버십 수정
+      tags:
+      - Memberships
+  /api/v2/memberships/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 멤버십 정보를 조회합니다. (상세 설명)
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Membership uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/membership.GetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/membership.Fail400GetResponse'
+      summary: 멤버십 정보 단건 조회
+      tags:
+      - Memberships
+swagger: "2.0"
