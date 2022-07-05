@@ -13,7 +13,7 @@ type CreateResponse struct {
 }
 
 type UpdateRequest struct {
-	ID             string `json:"-`
+	ID             string `param:"id"`
 	UserName       string `json:"user_name"`
 	MembershipType string `json:"membership_type"`
 }

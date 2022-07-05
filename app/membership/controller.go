@@ -44,8 +44,7 @@ func (c Controller) Update(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(http.StatusBadRequest, UpdateResponse{Message: "invalid_request_format"})
 	}
-	req.ID = ctx.Param("id")
-
+	//req.ID = ctx.Param("id")
 	res, _ := c.service.Update(req)
 	return ctx.JSON(res.Code, res)
 }
